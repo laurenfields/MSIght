@@ -29,6 +29,12 @@ jobs:
       run: |
         export PYTHONPATH="${PYTHONPATH}:${GITHUB_WORKSPACE}"  # Add your project directory to PYTHONPATH
 
+    - name: Print current directory and files
+      run: |
+        echo "Current working directory: $(pwd)"
+        echo "Files in current directory:"
+        ls -la
+
     - name: Run tests
       run: |
         python MSight/run_pytest.py
