@@ -24,6 +24,6 @@ pip install msight
 
 
 
-#### Release notes
+#### Major release notes
 ##### Version 0.0.1 (Released 9/17/2024)
 * Initial release
