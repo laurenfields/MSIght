@@ -42,4 +42,4 @@ jobs:
 
     - name: Run tests
       run: |
-        python /MSight/run_pytest.py
+        python ./MSight/run_pytest.py
