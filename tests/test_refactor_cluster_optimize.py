@@ -73,7 +73,7 @@ def test_kmeans_cluster_msi_scored_w_csv(mock_to_csv, mock_savefig, mock_apply_d
     tsne_components = 2
     tsne_verbose = False
     k_means_cluster_number = 3
-    max_clusters = 10
+    max_clusters = 8
 
     df, width, height, tsne_result = kmeans_cluster_msi_scored_w_csv(
         filename, output_directory, sample_name, sigma, structuring_element_size,

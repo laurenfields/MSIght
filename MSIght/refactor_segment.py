@@ -40,7 +40,7 @@ def cluster_msi(filename,output_directory,sample_name,sigma,structuring_element_
     sns.scatterplot(
         x="tsne-one", y="tsne-two",
         hue="cluster",
-        palette=sns.color_palette("tab10"),
+        #palette=sns.color_palette("tab10"),
         data=df,
         legend="full",
         alpha=0.6
@@ -209,7 +209,7 @@ def cluster_msi_scored_w_csv(filename, output_directory, sample_name, sigma, str
                 sns.scatterplot(
                     x=tsne_result[:, 0], y=tsne_result[:, 1],
                     hue=cluster_labels,
-                    palette=sns.color_palette("tab10"),
+                    #palette=sns.color_palette("tab10"),
                     legend="full",
                     alpha=0.6
                 )

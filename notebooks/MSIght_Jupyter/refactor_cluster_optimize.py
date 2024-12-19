@@ -53,7 +53,7 @@ def kmeans_cluster_msi_scored_w_csv(filename, output_directory, sample_name, sig
                     sns.scatterplot(
                         x=tsne_result[:, 0], y=tsne_result[:, 1],
                         hue=cluster_labels,
-                        palette=sns.color_palette("tab10"),
+                        #palette=sns.color_palette("tab10"),
                         legend="full",
                         alpha=0.6)
                     plt.title(f't-SNE with Perplexity={perplexity}, LR={learning_rate}, Iter={n_iter}, Silhouette={silhouette_avg:.3f}, K-means={k_means_cluster_number}')
