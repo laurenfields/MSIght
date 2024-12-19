@@ -35,15 +35,6 @@ jobs:
         echo "Files in current directory:"
         ls -la
 
-    - name: Check if run_pytest.py exists
-      run: |
-        if [ -f "MSight/run_pytest.py" ]; then 
-          echo "run_pytest.py exists!";
-        else 
-          echo "run_pytest.py is missing!";
-          exit 1;
-        fi
-
     - name: Print full directory structure
       run: |
         find . -type d -print
