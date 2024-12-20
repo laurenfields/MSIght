@@ -8,6 +8,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+  env:
+      ACTIONS_STEP_DEBUG: true
+      ACTIONS_RUNNER_DEBUG: true
+
     steps:
       - name: Check out the code
         uses: actions/checkout@v2
@@ -18,10 +22,14 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        run: pip install build twine
+        run: |
+	   python -m pip install --upgrade pip
+	   pip -m install build twine --verbose
 
       - name: Build the package
-        run: python -m build
+        run: |
+          python -m build --sdist --wheel --verbose
+          ls -lh dist
 
       - name: Publish to PyPI
         env:
