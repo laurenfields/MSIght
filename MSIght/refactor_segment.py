@@ -5,6 +5,7 @@ Created on Fri Nov 15 16:33:13 2024
 @author: lafields2
 """
 
+import os
 import pyimzml.ImzMLParser
 from scipy.ndimage import gaussian_filter1d,white_tophat
 import pandas as pd
@@ -22,6 +23,78 @@ from refactor_common_functions import load_and_preprocess_imzml,create_intensity
 
 def cluster_msi(filename,output_directory,sample_name,sigma,structuring_element_size,pca_components,
            tsne_components,tsne_perplexity,tsne_interations,tsne_learning_rate,k_means_cluster_number):
+    """
+    Performs t-SNE dimensionality reduction and K-means clustering on MSI data.
+
+    Parameters
+    ----------
+    filename : str
+        Path to the .imzML file containing the MSI data.
+
+    output_directory : str
+        Directory where output files (images and clusters) will be saved.
+
+    sample_name : str
+        Name used to label the saved output files.
+
+    sigma : float
+        Standard deviation for Gaussian smoothing of the MSI data.
+
+    structuring_element_size : int
+        Size of the structuring element used for morphological operations.
+
+    pca_components : int
+        Number of principal components to retain during PCA.
+
+    tsne_components : int
+        Number of components for t-SNE dimensionality reduction.
+
+    tsne_perplexity : float
+        Perplexity parameter for t-SNE, balancing local and global data structure.
+
+    tsne_interations : int
+        Number of iterations for the t-SNE optimization process.
+
+    tsne_learning_rate : float
+        Learning rate parameter for t-SNE, controlling the step size during optimization.
+
+    k_means_cluster_number : int
+        Number of clusters for K-means clustering.
+
+    Returns
+    -------
+    df : pandas.DataFrame
+        DataFrame containing t-SNE coordinates and cluster labels.
+
+    width : int
+        Width of the cluster image.
+
+    height : int
+        Height of the cluster image.
+
+    cluster_colors : dict
+        Dictionary mapping clusters to fixed colors.
+
+    cluster_image_full : numpy.ndarray
+        The full cluster image with pixel-level assignments.
+
+    cmap : matplotlib.colors.ListedColormap
+        Colormap for the clusters.
+
+    legend_handles_full : list
+        List of legend handles for custom legends.
+
+    tsne_result : numpy.ndarray
+        The t-SNE results after dimensionality reduction.
+
+    Notes
+    -----
+    - Loads and preprocesses the MSI data from the .imzML file.
+    - Applies PCA and t-SNE for dimensionality reduction.
+    - Performs K-means clustering.
+    - Visualizes the clustering results using scatterplots and MSI overlays.
+    - Saves the t-SNE scatterplot and cluster image as PNG files.
+    """
     coordinates, mz_values, intensities = load_and_preprocess_imzml(filename, sigma, structuring_element_size)
     df = pd.DataFrame({
         'x': [coord[0] for coord in coordinates],
@@ -46,7 +119,8 @@ def cluster_msi(filename,output_directory,sample_name,sigma,structuring_element_
         alpha=0.6
     )
     plt.title('t-SNE of Mass Spectrometry Image with K-means Clustering')
-    fig_outpath = output_directory + '\\' + sample_name + '_tSNE_cluster.png'
+    fig_outpath = os.path.join(output_directory, sample_name,"_tSNE_cluster.png")
+    #fig_outpath = output_directory + '\\' + sample_name + '_tSNE_cluster.png'
     plt.savefig(fig_outpath)
     plt.show()
     
@@ -79,13 +153,43 @@ def cluster_msi(filename,output_directory,sample_name,sigma,structuring_element_
     plt.title('Full Clustered Mass Spectrometry Image')
     plt.axis('off')
     plt.legend(handles=legend_handles_full, loc='upper right')
-    fig_outpath = output_directory + '\\' + sample_name + '_MSI_tSNE_cluster_overlay.png'
+    #fig_outpath = output_directory + '\\' + sample_name + '_MSI_tSNE_cluster_overlay.png'
+    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_tSNE_cluster_overlay.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
-    fig_outpath = output_directory + '\\' + sample_name + '_MSI_tSNE_cluster_overlay.png'
+    #fig_outpath = output_directory + '\\' + sample_name + '_MSI_tSNE_cluster_overlay.png'
+    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_tSNE_cluster_overlay.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return df,width, height,cluster_colors,cluster_image_full,cmap,legend_handles_full,tsne_result
 
 def cluster_removal(df,width,height,cluster_colors,cluster_image_full,cmap,legend_handles_full,clusters_to_remove,output_directory,sample_name):
+    """
+    Creates a composite MSI image by aggregating pixel intensities above a threshold.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame containing MSI pixel data with coordinates and intensities.
+
+    threshold : float
+        Intensity threshold for filtering pixel values.
+
+    output_directory : str
+        Directory where the composite image will be saved.
+
+    sample_name : str
+        Name used for labeling the saved output file.
+
+    Returns
+    -------
+    composite_image : numpy.ndarray
+        Composite MSI image where pixel values represent the sum of intensities above the threshold.
+
+    Notes
+    -----
+    - Filters intensities based on the specified threshold.
+    - Aggregates intensities into a composite image.
+    - Displays and saves the composite image as a PNG file.
+    """
     filtered_df = df[~df['cluster'].isin(clusters_to_remove)] # Filter out the rows with clusters to remove
     cluster_image_filtered = np.zeros((width, height)) - 1  # Initialize with -1 to handle missing data
     for idx, row in filtered_df.iterrows():
@@ -103,12 +207,60 @@ def cluster_removal(df,width,height,cluster_colors,cluster_image_full,cmap,legen
     axes[1].set_title('Clustered Mass Spectrometry Image without Specific Clusters')
     axes[1].axis('off')
     axes[1].legend(handles=legend_handles_filtered, loc='upper right')
-    fig_outpath = output_directory + '\\' + sample_name + '_MSI_tSNE_cluster_overlay_w_clusters_remove.png'
+    #fig_outpath = output_directory + '\\' + sample_name + '_MSI_tSNE_cluster_overlay_w_clusters_remove.png'
+    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_tSNE_cluster_overlay_w_clusters_remove.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return filtered_df
 
 def make_composite_image(df,threshold,output_directory,sample_name):
+    """
+    Creates a composite MSI image by aggregating pixel intensities above a specified threshold.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame containing MSI pixel data with coordinates, m/z values, and intensities.
+
+    threshold : float
+        Intensity threshold for filtering pixel values.
+
+    output_directory : str
+        Directory where the composite image will be saved.
+
+    sample_name : str
+        Name used for labeling the saved output file.
+
+    Returns
+    -------
+    composite_image : numpy.ndarray
+        Composite MSI image where pixel values represent the sum of intensities above the threshold.
+
+    Notes
+    -----
+    - Filters intensities based on the specified threshold.
+    - Aggregates intensities into a composite image.
+    - Displays and saves the composite image as a PNG file.
+    """
     def process_imzml(file_path):
+        """
+    Processes an .imzML file and extracts pixel coordinates, m/z values, and intensities.
+
+    Parameters
+    ----------
+    file_path : str
+        Path to the .imzML file containing the MSI data.
+
+    Returns
+    -------
+    df : pandas.DataFrame
+        DataFrame containing pixel coordinates ('x', 'y'), m/z values, and intensity spectra.
+
+    Notes
+    -----
+    - Uses PyImzML to parse the .imzML file.
+    - Extracts spectra for each pixel in the file.
+    - Stores the data in a structured DataFrame for further processing.
+    """
         parser = pyimzml.ImzMLParser(file_path)
         data = []
         for idx, (x, y, z) in enumerate(parser.coordinates):
@@ -117,12 +269,47 @@ def make_composite_image(df,threshold,output_directory,sample_name):
         df = pd.DataFrame(data, columns=['x', 'y', 'mz_values', 'intensities'])
         return df
     def filter_intensities_above_threshold(mz_values, intensities, threshold): # Function to filter intensities above a given threshold
+        """
+        Filters intensities that are above a given threshold.
+
+        Parameters
+        ----------
+        mz_values : numpy.ndarray
+            Array of m/z values.
+
+        intensities : list of numpy.ndarray
+            List of intensity spectra corresponding to the m/z values.
+
+        threshold : float
+            Intensity threshold for filtering pixel values.
+
+        Returns
+        -------
+        filtered_intensities : numpy.ndarray
+            Sum of intensities above the threshold for each pixel.
+        """
         filtered_intensities = []
         for intens in intensities:
             mask = intens > threshold
             filtered_intensities.append(np.sum(intens[mask]))
         return np.array(filtered_intensities)
     def create_composite_image_for_intensity_threshold(df, threshold): # Function to create the composite image for intensities above a threshold
+        """
+        Creates a composite image by summing intensities above a threshold.
+
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            DataFrame containing MSI pixel data.
+
+        threshold : float
+            Intensity threshold for filtering pixel values.
+
+        Returns
+        -------
+        composite_image : numpy.ndarray
+            Composite MSI image with summed intensities above the threshold.
+        """
         width, height = max(df['x']), max(df['y'])
         composite_image = np.zeros((width, height))
         mz_values = np.array(df['mz_values'].tolist())
@@ -137,11 +324,44 @@ def make_composite_image(df,threshold,output_directory,sample_name):
     plt.colorbar()
     title = 'Composite Image for Intensities Above Threshold='+str(threshold)
     plt.title(title)
-    fig_outpath = output_directory + '\\' + sample_name + '_MSI_composite_image_all_mz.png'
+    #fig_outpath = output_directory + '\\' + sample_name + '_MSI_composite_image_all_mz.png'
+    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_composite_image_all_mz.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return composite_image
 
 def composite_wo_selected_clusters(df,clusters_to_remove,composite_image,output_directory,sample_name):
+    """
+    Creates a composite MSI image with specified clusters removed.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame containing MSI pixel data with coordinates and cluster labels.
+
+    clusters_to_remove : list
+        List of clusters to be removed from the composite image.
+
+    composite_image : numpy.ndarray
+        Original composite MSI image before removal.
+
+    output_directory : str
+        Directory where the filtered image will be saved.
+
+    sample_name : str
+        Name used for labeling the saved output file.
+
+    Returns
+    -------
+    filtered_image : numpy.ndarray
+        Composite MSI image with specified clusters removed.
+
+    Notes
+    -----
+    - Filters out coordinates corresponding to the specified clusters.
+    - Sets the pixel intensities of these coordinates to zero.
+    - Displays and saves the updated composite image.
+    """
+
     coordinates_to_remove = df[df['cluster'].isin(clusters_to_remove)][['x', 'y']].values
     list_coord = coordinates_to_remove.tolist()
     filtered_image = composite_image.copy()
@@ -150,11 +370,42 @@ def composite_wo_selected_clusters(df,clusters_to_remove,composite_image,output_
         if x < filtered_image.shape[1] and y < filtered_image.shape[0]:
             filtered_image[y, x] = 0 
     plt.imshow(filtered_image, cmap='viridis')
-    fig_outpath = output_directory + '\\' + sample_name + '_MSI_filtered_image_w_clusters_removed.png'
+    #fig_outpath = output_directory + '\\' + sample_name + '_MSI_filtered_image_w_clusters_removed.png'
+    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_filtered_image_w_clusters_removed.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return filtered_image
 
 def remove_residual_noise(filtered_image,median_filter_size,output_directory,sample_name):
+    """
+    Reduces residual noise from a filtered MSI image using median filtering along tissue edges.
+
+    Parameters
+    ----------
+    filtered_image : numpy.ndarray
+        The composite MSI image with clusters removed.
+
+    median_filter_size : int
+        Size of the median filter applied to the tissue edges.
+
+    output_directory : str
+        Directory where the filtered image will be saved.
+
+    sample_name : str
+        Name used for labeling the saved output file.
+
+    Returns
+    -------
+    final_image : numpy.ndarray
+        The MSI image after edge-based median filtering.
+
+    Notes
+    -----
+    - Applies Otsu's thresholding to create a tissue mask.
+    - Erodes the tissue mask to detect edges.
+    - Applies median filtering to the detected edges.
+    - Combines the filtered edges with the original tissue image.
+    - Displays and saves the final image with filtered edges.
+    """
     tissue_image = filtered_image.copy()
     threshold = filters.threshold_otsu(tissue_image)
     tissue_mask = tissue_image > threshold # Create a binary mask of the tissue region
@@ -174,12 +425,67 @@ def remove_residual_noise(filtered_image,median_filter_size,output_directory,sam
     plt.imshow(final_image, cmap='viridis')
     plt.title('Final Image (Filtered Edges)')
     plt.colorbar()
-    fig_outpath = output_directory + '\\' + sample_name + '_MSI_median_filtered_image.png'
+    #fig_outpath = output_directory + '\\' + sample_name + '_MSI_median_filtered_image.png'
+    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_median_filtered_image.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return final_image
 
 def cluster_msi_scored_w_csv(filename, output_directory, sample_name, sigma, structuring_element_size, pca_components,
                 tsne_components, tsne_verbose, k_means_cluster_number):
+    """
+    Performs t-SNE dimensionality reduction and K-means clustering on MSI data, scoring results with Silhouette scores.
+
+    Parameters
+    ----------
+    filename : str
+        Path to the .imzML file containing the MSI data.
+
+    output_directory : str
+        Directory where output files (images and CSV) will be saved.
+
+    sample_name : str
+        Name used to label the saved output files.
+
+    sigma : float
+        Standard deviation for Gaussian smoothing of the MSI data.
+
+    structuring_element_size : int
+        Size of the structuring element used for morphological operations.
+
+    pca_components : int
+        Number of principal components to retain during PCA.
+
+    tsne_components : int
+        Number of components for t-SNE dimensionality reduction.
+
+    tsne_verbose : int
+        Verbosity level for t-SNE.
+
+    k_means_cluster_number : int
+        Number of clusters for K-means clustering.
+
+    Returns
+    -------
+    df : pandas.DataFrame
+        DataFrame containing MSI coordinates, intensities, and clusters.
+
+    width : int
+        Width of the MSI image.
+
+    height : int
+        Height of the MSI image.
+
+    tsne_result : numpy.ndarray
+        The best t-SNE results after dimensionality reduction.
+
+    Notes
+    -----
+    - Loads and preprocesses MSI data from the .imzML file.
+    - Applies PCA and t-SNE for dimensionality reduction.
+    - Performs K-means clustering and evaluates Silhouette scores.
+    - Saves t-SNE scatterplots, cluster images, and a CSV file with scores.
+    - Uses a grid search for the best t-SNE parameters.
+    """
     coordinates, mz_values, intensities = load_and_preprocess_imzml(filename, sigma, structuring_element_size)
     df = pd.DataFrame({
         'x': [coord[0] for coord in coordinates],
@@ -214,7 +520,8 @@ def cluster_msi_scored_w_csv(filename, output_directory, sample_name, sigma, str
                     alpha=0.6
                 )
                 plt.title(f't-SNE with Perplexity={perplexity}, LR={learning_rate}, Iter={n_iter}, Silhouette={silhouette_avg:.3f}')
-                tsne_plot_outpath = f"{output_directory}\\{sample_name}_tSNE_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg:.3f}.png"
+                #tsne_plot_outpath = f"{output_directory}\\{sample_name}_tSNE_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg:.3f}.png"
+                tsne_plot_outpath = os.path.join(output_directory, sample_name,"_tSNE_p",perplexity,'_lr',learning_rate,'_iter',n_iter,'_sil',silhouette_avg,'.png')
                 plt.savefig(tsne_plot_outpath, bbox_inches='tight')
                 plt.close()
                 width, height = max(df['x']), max(df['y'])
@@ -226,7 +533,8 @@ def cluster_msi_scored_w_csv(filename, output_directory, sample_name, sigma, str
                 cmap = plt.cm.colors.ListedColormap([plt.cm.tab10(i) for i in range(k_means_cluster_number)])
                 im_full = plt.imshow(cluster_image_full, cmap=cmap, interpolation='nearest')
                 plt.title(f'Cluster Image with Perplexity={perplexity}, LR={learning_rate}, Iter={n_iter}, Silhouette={silhouette_avg:.3f}')
-                cluster_plot_outpath = f"{output_directory}\\{sample_name}_ClusterImage_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg:.3f}.png"
+                #cluster_plot_outpath = f"{output_directory}\\{sample_name}_ClusterImage_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg:.3f}.png"
+                cluster_plot_outpath = os.path.join(output_directory, sample_name,"_ClusterImage_p",perplexity,'_lr',learning_rate,'_iter',n_iter,'_sil',silhouette_avg,'.png')
                 plt.savefig(cluster_plot_outpath, bbox_inches='tight')
                 plt.close()
                 results_list.append({
@@ -239,7 +547,8 @@ def cluster_msi_scored_w_csv(filename, output_directory, sample_name, sigma, str
                     best_silhouette = silhouette_avg
                     best_tsne_result = tsne_result
     results_df = pd.DataFrame(results_list) # Create a DataFrame from the results list
-    results_csv_outpath = f"{output_directory}\\{sample_name}_tSNE_Results_pt2.csv"     # Save the results DataFrame as a CSV
+    #results_csv_outpath = f"{output_directory}\\{sample_name}_tSNE_Results_pt2.csv"     # Save the results DataFrame as a CSV
+    results_csv_outpath = os.path.join(output_directory, sample_name,"_tSNE_Results_pt2.csv")
     results_df.to_csv(results_csv_outpath, index=False)
     tsne_result = best_tsne_result # Use the best t-SNE result
     df['tsne-one'] = tsne_result[:, 0]

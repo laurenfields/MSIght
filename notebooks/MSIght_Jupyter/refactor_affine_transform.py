@@ -13,15 +13,86 @@ from skimage.registration import phase_cross_correlation
 from skimage.transform import AffineTransform, warp
 from skimage import img_as_float
 from scipy.optimize import minimize
+import os
 
 def display_and_save_image(image_array, title, filename, output_directory):
+    """
+    Displays a binary image and saves it as a PNG file.
+
+    Parameters
+    ----------
+    image_array : numpy.ndarray
+        The binary image array to be displayed and saved. Assumes a 2D grayscale format.
+    
+    title : str
+        The title to be displayed above the image when rendered.
+    
+    filename : str
+        The name of the output file (without the file extension) used for saving the image.
+    
+    output_directory : str
+        The path to the directory where the image will be saved.
+
+    Returns
+    -------
+    None
+        This function does not return any value.
+
+    Notes
+    -----
+    - The image is displayed using matplotlib with the 'gray' colormap.
+    - The axis is turned off for a cleaner display.
+    - The output file is saved as a PNG image in the specified directory.
+    - If the output directory does not exist, an error will be raised unless handled externally.
+    """
     plt.figure()
     plt.imshow(image_array, cmap='gray')  # Assuming image_array is already the correct format (binary image)
     plt.title(title)
     plt.axis('off')
-    plt.savefig(f"{output_directory}/{filename}.png")
+    #plt.savefig(f"{output_directory}/{filename}.png")
+    plt.savefig(os.path.join(output_directory, filename,'.png'))
     plt.close()
 def register_he_msi(cropped_image,resized_msi_image,msi_threshold,he_threshold,output_directory,sample_name):
+    """
+    Registers a cropped H&E image to a resized MSI image using affine transformation.
+
+    Parameters
+    ----------
+    cropped_image : numpy.ndarray
+        The cropped H&E image, expected to be grayscale or RGB.
+    
+    resized_msi_image : numpy.ndarray
+        The resized MSI image, expected to be grayscale or RGB.
+
+    msi_threshold : int
+        Threshold value for binarizing the MSI image (0-255).
+    
+    he_threshold : int
+        Threshold value for binarizing the H&E image (0-255).
+    
+    output_directory : str
+        Directory where registration results will be saved.
+    
+    sample_name : str
+        Name used to label the saved registration output files.
+
+    Returns
+    -------
+    optimal_M : numpy.ndarray
+        The 3x3 affine transformation matrix obtained after optimization.
+    
+    final_registered_image : numpy.ndarray
+        The final registered binary MSI image after applying the optimal affine transformation.
+
+    Notes
+    -----
+    - Converts RGB images to grayscale if needed.
+    - Binarizes images using specified thresholds.
+    - Uses phase cross-correlation for initial alignment.
+    - Optimizes alignment using Sum of Squared Differences (SSD).
+    - Saves the initial and optimized registration results as PNG files.
+    - Displays intermediate binary and registered images along with SSD values.
+    """
     #Make sure H&E image is grayscale
     if len(cropped_image.shape) == 3:
         fixed_gray = cv2.cvtColor(cropped_image, cv2.COLOR_BGR2GRAY)

@@ -10,9 +10,49 @@ import tifffile
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
+import os
 
 
 def interpolate_MSI(filename,image_path,msi_image,smoothed_image,output_directory,sample_name):
+    """
+    Interpolates an MSI image to match the dimensions of a corresponding H&E image.
+
+    Parameters
+    ----------
+    filename : str
+        Path to the .imzML file containing MSI data.
+
+    image_path : str
+        Path to the corresponding H&E image file (TIFF format).
+
+    msi_image : numpy.ndarray
+        The MSI image to be resized.
+
+    smoothed_image : numpy.ndarray
+        The smoothed and binarized H&E image used for cropping.
+
+    output_directory : str
+        Directory where the resized MSI image will be saved.
+
+    sample_name : str
+        Name used for labeling the saved output file.
+
+    Returns
+    -------
+    cropped_image : numpy.ndarray
+        The cropped H&E image after binarization and thresholding.
+
+    resized_msi_image : numpy.ndarray
+        The resized MSI image matching the cropped H&E image's dimensions.
+
+    Notes
+    -----
+    - Extracts image dimensions from the TIFF file and the .imzML file.
+    - Applies a binary mask to the smoothed H&E image.
+    - Determines cropping boundaries based on tissue presence.
+    - Resizes the MSI image to match the cropped H&E image's dimensions using linear interpolation.
+    - Saves the resized MSI image as a PNG file.
+    """
     parser = pyimzml.ImzMLParser.ImzMLParser(filename)
     # Get dimensions
     x_dimension = parser.imzmldict['max count of pixels x']
@@ -45,11 +85,54 @@ def interpolate_MSI(filename,image_path,msi_image,smoothed_image,output_director
     plt.colorbar(label='Intensity')
     title = 'Resized MSI image with linear interpolation'
     plt.title(title)
-    fig_outpath = output_directory + '\\' + sample_name + '_MSI_composite_image_all_mz.png'
+    #fig_outpath = output_directory + '\\' + sample_name + '_MSI_composite_image_all_mz.png'
+    fig_outpath = os.path.join(output_directory,sample_name, "_MSI_composite_image_all_mz.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return cropped_image,resized_msi_image
 
 def interpolate_and_visualize(filename, image_path, msi_image, smoothed_image, output_directory, sample_name, original_areas_to_zoom):
+    """
+    Interpolates an MSI image to match the H&E image dimensions and visualizes different interpolation methods.
+
+    Parameters
+    ----------
+    filename : str
+        Path to the .imzML file containing MSI data.
+
+    image_path : str
+        Path to the corresponding H&E image file (TIFF format).
+
+    msi_image : numpy.ndarray
+        The MSI image to be resized.
+
+    smoothed_image : numpy.ndarray
+        The smoothed and binarized H&E image used for cropping.
+
+    output_directory : str
+        Directory where the visualization output will be saved.
+
+    sample_name : str
+        Name used for labeling the saved output file.
+
+    original_areas_to_zoom : dict
+        Dictionary containing areas to zoom in as tuples (x1, y1, x2, y2).
+
+    Returns
+    -------
+    cropped_image : numpy.ndarray
+        The cropped H&E image after binarization and thresholding.
+
+    resized_msi_image : numpy.ndarray
+        The resized MSI image matching the cropped H&E image's dimensions.
+
+    Notes
+    -----
+    - Extracts image dimensions from the .imzML file and the TIFF file.
+    - Binarizes the H&E image and determines cropping boundaries.
+    - Adjusts zoom areas to match the resized MSI image.
+    - Compares multiple interpolation methods: Bilinear, Bicubic, Nearest Neighbor, and Lanczos.
+    - Displays and saves the visualization as a PNG file.
+    """
     parser = pyimzml.ImzMLParser.ImzMLParser(filename)
     original_msi_width = parser.imzmldict['max count of pixels x']
     original_msi_height = parser.imzmldict['max count of pixels y']
@@ -101,7 +184,8 @@ def interpolate_and_visualize(filename, image_path, msi_image, smoothed_image, o
             plt.colorbar(img_plot, ax=ax, orientation='vertical')
     plt.suptitle('Interpolation Methods Comparison')
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-    fig_outpath = output_directory + '\\' + sample_name + '_interpolation_comparison.png'
+    #fig_outpath = output_directory + '\\' + sample_name + '_interpolation_comparison.png'
+    fig_outpath = os.path.join(output_directory,sample_name, "_interpolation_comparison.png")
     plt.savefig(fig_outpath, bbox_inches='tight')
     plt.show()
     return cropped_image, resized_msi_image

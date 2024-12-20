@@ -10,6 +10,43 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def perform_bspline(sized_he_image,transformed_ms_image,number_histograms,gradient_tolerance,optimizer_iterations,courseness):
+    """
+    Performs B-spline image registration between a sized H&E image and a transformed MSI image.
+
+    Parameters
+    ----------
+    sized_he_image : numpy.ndarray
+        The fixed H&E image, expected as a 2D grayscale array.
+
+    transformed_ms_image : numpy.ndarray
+        The moving MSI image after affine transformation, expected as a 2D grayscale array.
+
+    number_histograms : int
+        Number of histogram bins used for Mattes mutual information metric.
+    
+    gradient_tolerance : float
+        Convergence tolerance for the gradient during optimization.
+
+    optimizer_iterations : int
+        Maximum number of iterations for the LBFGSB optimizer.
+
+    courseness : int
+        Controls the spacing of the B-spline grid. Larger values create a coarser grid.
+
+    Returns
+    -------
+    final_transform : sitk.Transform
+        The final B-spline transform after registration.
+
+    Notes
+    -----
+    - Converts the input images to SimpleITK format.
+    - Initializes a B-spline transform based on the specified grid spacing.
+    - Uses the Mattes mutual information metric for registration.
+    - Configures the optimizer with specified tolerance and iteration limits.
+    - Applies the final transformation to the MSI image.
+    - Displays the fixed image, affine-transformed image, and B-spline refined image.
+    """
     fixed_image_sitk = sitk.GetImageFromArray(sized_he_image.astype(np.float32))
     transformed_ms_image_sitk = sitk.GetImageFromArray(transformed_ms_image.astype(np.float32))
     fixed_image_sitk = sitk.GetImageFromArray(sized_he_image.astype(np.float32))
