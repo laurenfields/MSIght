@@ -119,7 +119,7 @@ def cluster_msi(filename,output_directory,sample_name,sigma,structuring_element_
         alpha=0.6
     )
     plt.title('t-SNE of Mass Spectrometry Image with K-means Clustering')
-    fig_outpath = os.path.join(output_directory, sample_name,"_tSNE_cluster.png")
+    fig_outpath = os.path.join(output_directory, f"{sample_name}_tSNE_cluster.png")
     #fig_outpath = output_directory + '\\' + sample_name + '_tSNE_cluster.png'
     plt.savefig(fig_outpath)
     plt.show()
@@ -154,10 +154,10 @@ def cluster_msi(filename,output_directory,sample_name,sigma,structuring_element_
     plt.axis('off')
     plt.legend(handles=legend_handles_full, loc='upper right')
     #fig_outpath = output_directory + '\\' + sample_name + '_MSI_tSNE_cluster_overlay.png'
-    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_tSNE_cluster_overlay.png")
+    fig_outpath = os.path.join(output_directory, f"{sample_name}_MSI_tSNE_cluster_overlay.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     #fig_outpath = output_directory + '\\' + sample_name + '_MSI_tSNE_cluster_overlay.png'
-    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_tSNE_cluster_overlay.png")
+    fig_outpath = os.path.join(output_directory,f"{sample_name}_MSI_tSNE_cluster_overlay.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return df,width, height,cluster_colors,cluster_image_full,cmap,legend_handles_full,tsne_result
 
@@ -208,7 +208,7 @@ def cluster_removal(df,width,height,cluster_colors,cluster_image_full,cmap,legen
     axes[1].axis('off')
     axes[1].legend(handles=legend_handles_filtered, loc='upper right')
     #fig_outpath = output_directory + '\\' + sample_name + '_MSI_tSNE_cluster_overlay_w_clusters_remove.png'
-    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_tSNE_cluster_overlay_w_clusters_remove.png")
+    fig_outpath = os.path.join(output_directory, f"{sample_name}_MSI_tSNE_cluster_overlay_w_clusters_remove.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return filtered_df
 
@@ -325,7 +325,7 @@ def make_composite_image(df,threshold,output_directory,sample_name):
     title = 'Composite Image for Intensities Above Threshold='+str(threshold)
     plt.title(title)
     #fig_outpath = output_directory + '\\' + sample_name + '_MSI_composite_image_all_mz.png'
-    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_composite_image_all_mz.png")
+    fig_outpath = os.path.join(output_directory, f"{sample_name}_MSI_composite_image_all_mz.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return composite_image
 
@@ -370,7 +370,7 @@ def composite_wo_selected_clusters(df,clusters_to_remove,composite_image,output_
             filtered_image[y, x] = 0 
     plt.imshow(filtered_image, cmap='viridis')
     #fig_outpath = output_directory + '\\' + sample_name + '_MSI_filtered_image_w_clusters_removed.png'
-    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_filtered_image_w_clusters_removed.png")
+    fig_outpath = os.path.join(output_directory, f"{sample_name}_MSI_filtered_image_w_clusters_removed.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return filtered_image
 
@@ -425,7 +425,7 @@ def remove_residual_noise(filtered_image,median_filter_size,output_directory,sam
     plt.title('Final Image (Filtered Edges)')
     plt.colorbar()
     #fig_outpath = output_directory + '\\' + sample_name + '_MSI_median_filtered_image.png'
-    fig_outpath = os.path.join(output_directory, sample_name,"_MSI_median_filtered_image.png")
+    fig_outpath = os.path.join(output_directory, f"{sample_name}_MSI_median_filtered_image.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return final_image
 
@@ -520,7 +520,7 @@ def cluster_msi_scored_w_csv(filename, output_directory, sample_name, sigma, str
                 )
                 plt.title(f't-SNE with Perplexity={perplexity}, LR={learning_rate}, Iter={n_iter}, Silhouette={silhouette_avg:.3f}')
                 #tsne_plot_outpath = f"{output_directory}\\{sample_name}_tSNE_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg:.3f}.png"
-                tsne_plot_outpath = os.path.join(output_directory, sample_name,"_tSNE_p",perplexity,'_lr',learning_rate,'_iter',n_iter,'_sil',silhouette_avg,'.png')
+                tsne_plot_outpath = os.path.join(output_directory, f"{sample_name}_tSNE_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg}.png")
                 plt.savefig(tsne_plot_outpath, bbox_inches='tight')
                 plt.close()
                 width, height = max(df['x']), max(df['y'])
@@ -533,7 +533,7 @@ def cluster_msi_scored_w_csv(filename, output_directory, sample_name, sigma, str
                 im_full = plt.imshow(cluster_image_full, cmap=cmap, interpolation='nearest')
                 plt.title(f'Cluster Image with Perplexity={perplexity}, LR={learning_rate}, Iter={n_iter}, Silhouette={silhouette_avg:.3f}')
                 #cluster_plot_outpath = f"{output_directory}\\{sample_name}_ClusterImage_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg:.3f}.png"
-                cluster_plot_outpath = os.path.join(output_directory, sample_name,"_ClusterImage_p",perplexity,'_lr',learning_rate,'_iter',n_iter,'_sil',silhouette_avg,'.png')
+                cluster_plot_outpath = os.path.join(output_directory, f"{sample_name}_ClusterImage_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg}.png")
                 plt.savefig(cluster_plot_outpath, bbox_inches='tight')
                 plt.close()
                 results_list.append({
@@ -547,7 +547,7 @@ def cluster_msi_scored_w_csv(filename, output_directory, sample_name, sigma, str
                     best_tsne_result = tsne_result
     results_df = pd.DataFrame(results_list) # Create a DataFrame from the results list
     #results_csv_outpath = f"{output_directory}\\{sample_name}_tSNE_Results_pt2.csv"     # Save the results DataFrame as a CSV
-    results_csv_outpath = os.path.join(output_directory, sample_name,"_tSNE_Results_pt2.csv")
+    results_csv_outpath = os.path.join(output_directory,f"{sample_name}_tSNE_Results_pt2.csv")
     results_df.to_csv(results_csv_outpath, index=False)
     tsne_result = best_tsne_result # Use the best t-SNE result
     df['tsne-one'] = tsne_result[:, 0]

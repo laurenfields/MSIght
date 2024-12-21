@@ -50,7 +50,7 @@ def display_and_save_image(image_array, title, filename, output_directory):
     plt.title(title)
     plt.axis('off')
     #plt.savefig(f"{output_directory}/{filename}.png")
-    plt.savefig(os.path.join(output_directory, filename,'.png'))
+    plt.savefig(os.path.join(output_directory,f'{filename}.png'))
     plt.close()
 def register_he_msi(cropped_image,resized_msi_image,msi_threshold,he_threshold,output_directory,sample_name):
     """

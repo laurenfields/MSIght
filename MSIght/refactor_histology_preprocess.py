@@ -219,6 +219,6 @@ def preprocess_he(image_path,threshold_value,sample_name,output_directory):
     plt.imshow(final_he_image, cmap='gray')
     plt.tight_layout()
     #fig_outpath = output_directory + '\\' + sample_name + '_HE_processed_image.png'
-    fig_outpath = os.path.join(output_directory,sample_name, "_HE_processed_image.png")
+    fig_outpath = os.path.join(output_directory, f"{sample_name}_HE_processed_image.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return final_he_image

@@ -86,7 +86,7 @@ def interpolate_MSI(filename,image_path,msi_image,smoothed_image,output_director
     title = 'Resized MSI image with linear interpolation'
     plt.title(title)
     #fig_outpath = output_directory + '\\' + sample_name + '_MSI_composite_image_all_mz.png'
-    fig_outpath = os.path.join(output_directory,sample_name, "_MSI_composite_image_all_mz.png")
+    fig_outpath = os.path.join(output_directory,f"{sample_name}_MSI_composite_image_all_mz.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     return cropped_image,resized_msi_image
 
@@ -185,7 +185,7 @@ def interpolate_and_visualize(filename, image_path, msi_image, smoothed_image, o
     plt.suptitle('Interpolation Methods Comparison')
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     #fig_outpath = output_directory + '\\' + sample_name + '_interpolation_comparison.png'
-    fig_outpath = os.path.join(output_directory,sample_name, "_interpolation_comparison.png")
+    fig_outpath = os.path.join(output_directory,f"{sample_name}_interpolation_comparison.png")
     plt.savefig(fig_outpath, bbox_inches='tight')
     plt.show()
     return cropped_image, resized_msi_image

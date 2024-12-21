@@ -118,7 +118,7 @@ def kmeans_cluster_msi_scored_w_csv(filename, output_directory, sample_name, sig
                         alpha=0.6)
                     plt.title(f't-SNE with Perplexity={perplexity}, LR={learning_rate}, Iter={n_iter}, Silhouette={silhouette_avg:.3f}, K-means={k_means_cluster_number}')
                     #tsne_plot_outpath = f"{output_directory}\\{sample_name}_tSNE_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg:.3f}_kmeans_{k_means_cluster_number}.png"
-                    tsne_plot_outpath = os.path.join(output_directory,sample_name, "_tSNE_p",perplexity,'_lr',learning_rate,'_iter',n_iter,'_sil',silhouette_avg,'_kmeans_',k_means_cluster_number,'.png')
+                    tsne_plot_outpath = os.path.join(output_directory,f'{sample_name}_tSNE_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg}_kmeans_{k_means_cluster_number}.png')
                     plt.savefig(tsne_plot_outpath, bbox_inches='tight')
                     plt.close()
                     width, height = max(df['x']), max(df['y'])
@@ -130,8 +130,8 @@ def kmeans_cluster_msi_scored_w_csv(filename, output_directory, sample_name, sig
                     cmap = plt.cm.colors.ListedColormap([plt.cm.tab10(i) for i in range(k_means_cluster_number)])
                     im_full = plt.imshow(cluster_image_full, cmap=cmap, interpolation='nearest')
                     plt.title(f'Cluster Image with Perplexity={perplexity}, LR={learning_rate}, Iter={n_iter}, Silhouette={silhouette_avg:.3f}')
-                    #cluster_plot_outpath = f"{output_directory}\\{sample_name}_ClusterImage_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg:.3f}_kmeans_{k_means_cluster_number}.png"
-                    cluster_plot_outpath = os.path.join(output_directory,sample_name, "_ClusterImage_p",perplexity,'_lr',learning_rate,'_iter',n_iter,'_sil',silhouette_avg,'_kmeans_',k_means_cluster_number,'.png')
+                    #cluster_plot_outpath = f"{output_directory}\\{sample_name}{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg:.3f}_kmeans_{k_means_cluster_number}.png"
+                    cluster_plot_outpath = os.path.join(output_directory,f'{sample_name}_ClusterImage_p{perplexity}_lr{learning_rate}_iter{n_iter}_sil{silhouette_avg}_kmeans_{k_means_cluster_number}.png')
                     plt.savefig(cluster_plot_outpath, bbox_inches='tight')
                     plt.close()
                     results_list.append({
@@ -145,7 +145,7 @@ def kmeans_cluster_msi_scored_w_csv(filename, output_directory, sample_name, sig
                         best_tsne_result = tsne_result
     results_df = pd.DataFrame(results_list) # Create a DataFrame from the results list
     #results_csv_outpath = f"{output_directory}\\{sample_name}_tSNE_Results.csv"
-    results_csv_outpath = os.path.join(output_directory,sample_name, "_tSNE_Results.csv")
+    results_csv_outpath = os.path.join(output_directory,f"{sample_name}_tSNE_Results.csv")
     results_df.to_csv(results_csv_outpath, index=False) # Save the results DataFrame as a CSV
     tsne_result = best_tsne_result # Use the best t-SNE result
     df['tsne-one'] = tsne_result[:, 0]
@@ -221,7 +221,7 @@ def bottom_up_hierarchical_clustering(filename, output_directory, sample_name, s
     plt.xlabel('Data Points')
     plt.ylabel('Distance')
     #dendrogram_path = f"{output_directory}/{sample_name}_dendrogram_bottom_up.png"
-    dendrogram_path = os.path.join(output_directory,sample_name, "_dendrogram_bottom_up.png")
+    dendrogram_path = os.path.join(output_directory, "{sample_name}_dendrogram_bottom_up.png")
     plt.savefig(dendrogram_path)
     plt.close()
     silhouette_scores = []
@@ -232,6 +232,6 @@ def bottom_up_hierarchical_clustering(filename, output_directory, sample_name, s
         silhouette_scores.append((n_clusters, silhouette_avg))
     silhouette_df = pd.DataFrame(silhouette_scores, columns=['Number of Clusters', 'Silhouette Score'])
     #silhouette_csv = f"{output_directory}/{sample_name}_silhouette_scores_bottom_up.csv"
-    silhouette_csv = os.path.join(output_directory,sample_name, "_silhouette_scores_bottom_up.csv")
+    silhouette_csv = os.path.join(output_directory, f"{sample_name}_silhouette_scores_bottom_up.csv")
     silhouette_df.to_csv(silhouette_csv, index=False) # Save silhouette scores to a DataFrame and CSV
     return silhouette_df

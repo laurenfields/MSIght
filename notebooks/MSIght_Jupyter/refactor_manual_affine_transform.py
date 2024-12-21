@@ -65,7 +65,7 @@ def manual_register_he_msi(pts_ms, pts_he,resized_msi_image,cropped_image,output
     axes[2].axis('off')  # Hide the axes
     plt.show()
     #fig_outpath = output_directory + '\\' + sample_name + '_manual_affine_transformed_MSI.png'
-    fig_outpath = os.path.join(output_directory, sample_name,"_manual_affine_transformed_MSI.png")
+    fig_outpath = os.path.join(output_directory,f"{sample_name}_manual_affine_transformed_MSI.png")
     plt.savefig(fig_outpath,bbox_inches='tight')
     transformed_ms_image = transformed_ms_image.astype(cropped_image.dtype)
     return M,transformed_ms_image

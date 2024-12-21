@@ -50,7 +50,7 @@ def merge_all_results(output_directory,sample_name,fragger_out,filename,sized_he
     - Saves all generated images as PNG files.
     """
     #mz_image_dir_path = output_directory + '\\' + sample_name + '_mz_images'
-    mz_image_dir_path = os.path.join(output_directory,sample_name, "_mz_images")
+    mz_image_dir_path = os.path.join(output_directory, f"{sample_name}_mz_images")
     try:  
         os.mkdir(mz_image_dir_path)  
     except OSError:  
@@ -60,7 +60,7 @@ def merge_all_results(output_directory,sample_name,fragger_out,filename,sized_he
     prot_list = prot_list_df['Protein Name'].values.tolist()
     for b in prot_list:
         #mz_image_dir_protein_path = mz_image_dir_path + '\\' + b + '_mz_images'
-        mz_image_dir_protein_path = os.path.join(mz_image_dir_path,b, "_mz_images")
+        mz_image_dir_protein_path = os.path.join(mz_image_dir_path,f"{b}_mz_images")
         try:  
             os.mkdir(mz_image_dir_protein_path)  
         except OSError:  
@@ -79,7 +79,7 @@ def merge_all_results(output_directory,sample_name,fragger_out,filename,sized_he
         plt.title('Composite image for protein ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_protein_' + str(b) + '_composite_image.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_protein_",str(b),'_composite_image.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_protein_{b}_composite_image.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         sized_he_image = sized_he_image.astype('uint8')
@@ -89,7 +89,7 @@ def merge_all_results(output_directory,sample_name,fragger_out,filename,sized_he
         plt.title('MSI/H&E overlay protein ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_protein_' + str(b) + '_overlay_composite_image_5percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_protein_",str(b),'_overlay_composite_image_5percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_protein_{b}_overlay_composite_image_5percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         overlay_composite_image_10 = cv2.addWeighted(sized_he_image, 0.9, composite_image, 0.1, 0)
@@ -97,7 +97,7 @@ def merge_all_results(output_directory,sample_name,fragger_out,filename,sized_he
         plt.title('MSI/H&E overlay protein ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_protein_' + str(b) + '_overlay_composite_image_10percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_protein_",str(b),'_overlay_composite_image_10percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_protein_{b}_overlay_composite_image_10percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         overlay_composite_image_15 = cv2.addWeighted(sized_he_image, 0.85, composite_image, 0.15, 0)
@@ -105,7 +105,7 @@ def merge_all_results(output_directory,sample_name,fragger_out,filename,sized_he
         plt.title('MSI/H&E overlay protein ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_protein_' + str(b) + '_overlay_composite_image_15percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_protein_",str(b),'_overlay_composite_image_15percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_protein_{b}_overlay_composite_image_15percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         overlay_composite_image_50 = cv2.addWeighted(sized_he_image, 0.5, composite_image, 0.5, 0)
@@ -113,7 +113,7 @@ def merge_all_results(output_directory,sample_name,fragger_out,filename,sized_he
         plt.title('MSI/H&E overlay protein ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_protein_' + str(b) + '_overlay_composite_image_50percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_protein_",str(b),'_overlay_composite_image_50percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_protein_{b}_overlay_composite_image_50percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         overlay_composite_image_20 = cv2.addWeighted(sized_he_image, 0.8, composite_image, 0.2, 0)
@@ -121,7 +121,7 @@ def merge_all_results(output_directory,sample_name,fragger_out,filename,sized_he
         plt.title('MSI/H&E overlay protein ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_protein_' + str(b) + '_overlay_composite_image_20percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_protein_",str(b),'_overlay_composite_image_20percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_protein_{b}_overlay_composite_image_20percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         
@@ -161,7 +161,7 @@ def merge_all_results_gene_wise(output_directory,sample_name,fragger_out,filenam
     - Saves all generated images as PNG files.
     """
     #mz_image_dir_path = output_directory + '\\' + sample_name + '_mz_images'
-    mz_image_dir_path = os.path.join(output_directory,sample_name, "_mz_images")
+    mz_image_dir_path = os.path.join(output_directory, f"{sample_name}_mz_images")
     try:  
         os.mkdir(mz_image_dir_path)  
     except OSError:  
@@ -171,7 +171,7 @@ def merge_all_results_gene_wise(output_directory,sample_name,fragger_out,filenam
     prot_list = prot_list_df['Gene'].values.tolist()
     for b in prot_list:
         #mz_image_dir_protein_path = mz_image_dir_path + '\\' + b + '_mz_images'
-        mz_image_dir_protein_path = os.path.join(mz_image_dir_path,b, "_mz_images")
+        mz_image_dir_protein_path = os.path.join(mz_image_dir_path,f"{b}_mz_images")
         try:  
             os.mkdir(mz_image_dir_protein_path)  
         except OSError:  
@@ -190,7 +190,7 @@ def merge_all_results_gene_wise(output_directory,sample_name,fragger_out,filenam
         plt.title('Composite image for gene ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_gene_' + str(b) + '_composite_image.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_gene_",str(b),'_composite_image.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_gene_{b}_composite_image.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         sized_he_image = sized_he_image.astype('uint8')
@@ -200,7 +200,7 @@ def merge_all_results_gene_wise(output_directory,sample_name,fragger_out,filenam
         plt.title('MSI/H&E overlay gene ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_gene_' + str(b) + '_overlay_composite_image_5percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_gene_",str(b),'_overlay_composite_image_5percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_gene_{b}_overlay_composite_image_5percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         overlay_composite_image_10 = cv2.addWeighted(sized_he_image, 0.9, composite_image, 0.1, 0)
@@ -208,7 +208,7 @@ def merge_all_results_gene_wise(output_directory,sample_name,fragger_out,filenam
         plt.title('MSI/H&E overlay gene ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_gene_' + str(b) + '_overlay_composite_image_10percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_gene_",str(b),'_overlay_composite_image_10percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_gene_{b}_overlay_composite_image_10percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         overlay_composite_image_15 = cv2.addWeighted(sized_he_image, 0.85, composite_image, 0.15, 0)
@@ -216,7 +216,7 @@ def merge_all_results_gene_wise(output_directory,sample_name,fragger_out,filenam
         plt.title('MSI/H&E overlay gene ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_gene_' + str(b) + '_overlay_composite_image_15percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_gene_",str(b),'_overlay_composite_image_15percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_gene_{b}_overlay_composite_image_15percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         overlay_composite_image_50 = cv2.addWeighted(sized_he_image, 0.5, composite_image, 0.5, 0)
@@ -224,7 +224,7 @@ def merge_all_results_gene_wise(output_directory,sample_name,fragger_out,filenam
         plt.title('MSI/H&E overlay gene ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_gene_' + str(b) + '_overlay_composite_image_50percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_gene_",str(b),'_overlay_composite_image_50percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_gene_{b}_overlay_composite_image_50percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
         overlay_composite_image_20 = cv2.addWeighted(sized_he_image, 0.8, composite_image, 0.2, 0)
@@ -232,6 +232,6 @@ def merge_all_results_gene_wise(output_directory,sample_name,fragger_out,filenam
         plt.title('MSI/H&E overlay gene ' + str(b))
         plt.colorbar()
         #fig_outpath = mz_image_dir_protein_path + '\\' + sample_name + '_gene_' + str(b) + '_overlay_composite_image_20percentweight.png'
-        fig_outpath = os.path.join(mz_image_dir_protein_path,sample_name, "_gene_",str(b),'_overlay_composite_image_20percentweight.png')
+        fig_outpath = os.path.join(mz_image_dir_protein_path,f'{sample_name}_gene_{b}_overlay_composite_image_20percentweight.png')
         plt.savefig(fig_outpath,bbox_inches='tight')
         plt.clf()
