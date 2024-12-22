@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/msight.svg?cache-bust=1)](https://pypi.org/project/msight/)
 
 <div align="center">
-<img src="https://github.com/laurenfields/MSIght/blob/main/utils/MSIght_logo.png">
+<img src="https://github.com/laurenfields/MSIght/blob/main/MSIght_logo.png">
 </div>
 
 # MSIght
