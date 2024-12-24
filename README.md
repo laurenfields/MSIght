@@ -13,6 +13,7 @@ MSIght is a program produced by the Lingjun Li Lab at the University of Wisconsi
 #### Getting started
 * [User manual](https://docs.google.com/document/d/e/2PACX-1vRg7HEovZCDG1IdLaVpfKdxXk9n3LBGevGVzZj9DhtYL69CmZ8VAwbSIM4Tm7bsCUkNBI8ixcHTqp6f/pub)
 * [Documentation](https://msight-100.readthedocs.io/en/latest/)
+* [Video tutorial](https://drive.google.com/file/d/1caKp6fv9s_aWqJw8W0Bl-qT7vrga0kWd/view?usp=sharing)
 
 ## Installation
 
