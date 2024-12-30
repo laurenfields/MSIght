@@ -28,7 +28,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "msight-notebook=MSIght.launch_basic_notebook:main"
+            "msight-notebook=MSIght.launch_basic_notebook:main",
             "msight advanced-notebook=MSIght.launch_advanced_notebook:main"
         ]
     },
