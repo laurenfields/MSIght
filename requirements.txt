@@ -14,3 +14,4 @@ tifffile>=2023.4.12
 sphinx_rtd_theme>=1.0.0
 notebook>=7.3.1
 jupyter_server>=2.14.2
+plotly>=5.22.0
