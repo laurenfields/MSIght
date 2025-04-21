@@ -24,8 +24,7 @@ pip install msight
 ```
 
 ### How to Cite
-Fields, L.; Miles, H. N.; Adrian, A. E.; Patrenets, E.; Ricke, W. A.; Li, L. (2025). MSIght: A Modular Platform for Improved Confidence in Global, Untargeted Mass Spectrometry Imaging Annotation. J. Proteome Res.
-* (https://doi.org/10.1021/acs.jproteome.4c01140)
+Fields, L.; Miles, H. N.; Adrian, A. E.; Patrenets, E.; Ricke, W. A.; Li, L. (2025). MSIght: A Modular Platform for Improved Confidence in Global, Untargeted Mass Spectrometry Imaging Annotation. J. Proteome Res. https://doi.org/10.1021/acs.jproteome.4c01140
 
 #### Major release notes
 ##### Version 0.0.1 (Released 9/17/2024)
