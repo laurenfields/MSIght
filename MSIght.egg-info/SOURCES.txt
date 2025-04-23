@@ -4,6 +4,7 @@ README.md
 setup.py
 MSIght/__init__.py
 MSIght/launch_basic_notebook.py
+MSIght/launch_advanced_notebook.py
 MSIght/refactor_affine_transform.py
 MSIght/refactor_bspline.py
 MSIght/refactor_cluster_optimize.py
