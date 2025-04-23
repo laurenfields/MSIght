@@ -35,6 +35,7 @@ MSIght/__pycache__/refactor_manual_affine.cpython-39.pyc
 MSIght/__pycache__/refactor_segment.cpython-39.pyc
 notebooks/__init__.py
 notebooks/basic_workflow.ipynb
+notebooks/advanced_workflow.ipynb
 notebooks/MSIght_Jupyter/__init__.py
 notebooks/MSIght_Jupyter/refactor_affine_transform.py
 notebooks/MSIght_Jupyter/refactor_bspline.py
