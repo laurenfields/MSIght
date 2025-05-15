@@ -8,8 +8,8 @@ Created on Fri Nov 15 17:21:54 2024
 import matplotlib.pyplot as plt
 import os
 import cv2
-from utils.mz_image_extract import extract_mz_image_transform
-from utils.mz_image_extract import overlay_msi_he
+from refactor_mz_image_extract import extract_mz_image_transform
+from refactor_mz_image_extract import overlay_msi_he
 import pandas as pd
 import numpy as np
 
